@@ -20,23 +20,34 @@ data10 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&p
 #combines the 10 dataframes into one data frame w/ 200 values
 combined <- rbind.fill(list(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10))
 
-data <- select(combined, synopsis, averageRating, userCount, favoritesCount, startDate,
+data <- select(combined, canonicalTitle, synopsis, averageRating, userCount, favoritesCount, startDate,
                endDate, popularityRank, ratingRank, ageRating, episodeCount, youtubeVideoId, 
                posterImage.original, coverImage.original)
 
-Scatter <- function(d, x, y){
+
+
+
+Scatter.one <- function(d, x, y){
   p <- plot_ly(
     data = data, x = ~x, y = ~y, type = "scatter", mode = "markers", 
     marker = list(size = 10,
-                  color = 'rgba(255, 182, 193, .9)',
-                  line = list(color = 'rgba(152, 0, 0, .8)',
-                              width = 2))
-  )
+                  color = 'rgba(139, 72, 246, .9)',
+                  line = list(color = 'rgba(166, 111, 236, .8)',
+                              width = 2)))
+}
+
+Scatter.two <- function(d, x, y){
+  p <- ggplot(d, aes_string( x = x, y = y)) + geom_point() +  geom_count(color = "rgba(139, 72, 246, .9") + 
+    ggtitle("Viewer Count vs Favorite Count") + xlab("User Count") + ylab("Favorite Count")
+  
+  return(ggplotly(p))
 }
 
 my.server <- function(input, output) {
   output$scatterplot <- renderPlotly({ 
-    return(Scatter(data, data$userCount, data$favoritesCount))
+    print(input$ageR)
+    data.change <- filter(data, ageRating == input$ageR)
+    return(Scatter.two(data.change, data.change$userCount, data.change$favoritesCount))
   }) 
 }
 

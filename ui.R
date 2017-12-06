@@ -5,11 +5,18 @@ library('plotly')
 my.ui <- fluidPage(
   
   titlePanel("Kitsu Anime"),
-    
+  
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons("ageR","Age Rating:",
+                   choices = c("R", "PG", "G"),
+                   selected = "PG")
+      ),
+
     mainPanel(
-      # prints plot on UI
       plotlyOutput("scatterplot")
     )
+  )
 ) 
 
 shinyUI(my.ui)
