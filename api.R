@@ -19,9 +19,4 @@ combined <- rbind.fill(list(data1, data2, data3, data4, data5, data6, data7, dat
 data <- select(combined, canonicalTitle, synopsis, averageRating, userCount, favoritesCount, startDate, endDate, popularityRank, ratingRank, ageRating, episodeCount, youtubeVideoId, posterImage.original, coverImage.original)
 
 
-data.ratings <- select(data.twenty, canonicalTitle, averageRating, ratingFrequencies.2, ratingFrequencies.3,
-                       ratingFrequencies.4, ratingFrequencies.4, ratingFrequencies.5, ratingFrequencies.6,
-                       ratingFrequencies.7, ratingFrequencies.8, ratingFrequencies.9, ratingFrequencies.10,
-                       ratingFrequencies.11, ratingFrequencies.12, ratingFrequencies.13, ratingFrequencies.14,
-                       ratingFrequencies.15, ratingFrequencies.16, ratingFrequencies.17, ratingFrequencies.18,
-                       ratingFrequencies.19, ratingFrequencies.20)
+
