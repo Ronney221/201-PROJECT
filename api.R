@@ -6,6 +6,6 @@ data2 <- fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boff
 data3 <- fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=40")
 
 
-data.twenty <- flatten((data1$data))
+data.twenty <- flatten((data1$data$attributes))
 
 data <- select(data.twenty, canonicalTitle, synopsis, averageRating, userCount, favoritesCount, startDate, endDate, popularityRank, ratingRank, ageRating, episodeCount, youtubeVideoId, posterImage.original, coverImage.original)
