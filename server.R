@@ -14,14 +14,19 @@ data.twenty <- flatten(data1$data$attributes)
 
 data <- select(data.twenty, synopsis, averageRating, userCount, favoritesCount, startDate, endDate, popularityRank, ratingRank, ageRating, episodeCount, youtubeVideoId, posterImage.original, coverImage.original)
 
-Scatter <- function(data, x, y, min, max){
-  p <- ggplot(data, aes_string(x = x, y = y)) + geom_point(na.rm = FALSE) + geom_count() + ylim(min, max)
-  return(ggplotly(p))
+Scatter <- function(d, x, y){
+  p <- plot_ly(
+    data = data, x = ~x, y = ~y, type = "scatter", mode = "markers", 
+    marker = list(size = 10,
+                  color = 'rgba(255, 182, 193, .9)',
+                  line = list(color = 'rgba(152, 0, 0, .8)',
+                              width = 2))
+  )
 }
 
 my.server <- function(input, output) {
   output$scatterplot <- renderPlotly({ 
-    return(Scatter(data, data$averageRating, data$userCount, 70, 90))
+    return(Scatter(data, data$userCount, data$favoritesCount))
   }) 
 }
 
