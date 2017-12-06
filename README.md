@@ -1,2 +1,2 @@
 # 201-PROJECT
-my anime list
+kitsu anime api

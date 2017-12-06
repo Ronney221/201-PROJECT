@@ -20,7 +20,7 @@ data10 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&p
 #combines the 10 dataframes into one data frame w/ 200 values
 combined <- rbind.fill(list(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10))
 
-data <- select(combined, canonicalTitle, synopsis, averageRating, userCount, favoritesCount, startDate,
+data <- select(combined, canonicalTitle, showType, synopsis, averageRating, userCount, favoritesCount, startDate,
                endDate, popularityRank, ratingRank, ageRating, episodeCount, youtubeVideoId, 
                posterImage.original, coverImage.original)
 

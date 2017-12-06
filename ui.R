@@ -11,7 +11,7 @@ my.ui <- fluidPage(
       radioButtons("ageR","Age Rating:",
                    choices = c("R", "PG", "G"),
                    selected = "PG")
-      ),
+    ),
 
     mainPanel(
       plotlyOutput("scatterplot")
