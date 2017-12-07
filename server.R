@@ -51,20 +51,25 @@ bar <- function(data1, data2) {
 
 
 my.server <- function(input, output) {
+  # Reactive function that returns the choice for select
   selection <- reactive({input$select})
   
+  # Outputs synopsis of chosen anime
   output$info <- renderText({
     return(c(filter(data, canonicalTitle == selection())$synopsis, "\n"))
   })
   
+  # Outputs poster image of chosen anime
   output$poster<-renderText({c('<img src="',filter(data, canonicalTitle == selection())$posterImage.original,'"style="width: 35% ; height: 35%">')})
+  
+  # Outputs cover image of chosen anime
   output$cover<-renderText({c('<img src="',filter(data, canonicalTitle == selection())$coverImage.original,'"style="width: 35% ; height: 35%">')})
   
-
   output$mytable = DT::renderDataTable({
     data.rating
   })
   
+  # Outputs a pie chart comparing the totals of whatever choice is selected 
   output$pie1 <- renderPlotly({
     if (input$overview == 'User Views') {
       types.of.show <- select(data, showType, userCount) %>% 
@@ -87,6 +92,7 @@ my.server <- function(input, output) {
     }
   })
   
+  # Outputs a pie chart that shows a usercount comparison for the selected animes
   output$pie2 <- renderPlotly({
     choice <- data[grep(input$specificAnime, data$canonicalTitle), ]
     p <- plot_ly(choice, labels = ~canonicalTitle, values = ~userCount, type = 'pie') %>%
