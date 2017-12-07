@@ -1,11 +1,17 @@
+library(shiny)
+library(plotly)
+library(ggplot2)
+library(DT)
+
 url <- a("Kitsu Anime", href ="https://kitsu.io/explore/anime")
 
 my.ui <- fluidPage(
   
   tabsetPanel(
     tabPanel(
+      #main home page
       titlePanel("Home"),
-      h1("Anime Analysis- Using KITSU API"),
+      h1("Anime Analysis- Using KITSU API"), #links to github pages for authors
       h3("By: ", a("Ronney Do", href="https://github.com/Ronney221"), ", ",
          a("Zach Hsiao", href="https://github.com/ZmanHsiao"), ", ",
          a("Justin Wang", href="https://github.com/justinwang98"), ", ",
@@ -22,7 +28,7 @@ my.ui <- fluidPage(
     ),
     
     tabPanel(
-      titlePanel("Search bar"),
+      titlePanel("Search bar"), #search bar tab
       h1("Search"),
       sidebarLayout(
         sidebarPanel(
@@ -31,23 +37,30 @@ my.ui <- fluidPage(
           p("This search bar is a string matching search among 1000 datapoints in the dataset, searching for the name of an anime will cause the synopsis, poster image, and cover image to appear.")
         ),
         mainPanel(
-          textOutput("info"),
-          htmlOutput("poster"),
-          htmlOutput("cover")
+          textOutput("info"), #prints synopsis
+          htmlOutput("poster"), #displays poster picture
+          htmlOutput("cover") #displays cover image
         )
       )
     ),
     
     tabPanel(
-      titlePanel("Average Ratings"),
+      titlePanel("Average Ratings"), #bar graph tab
       h1("Analysis of the Average Rating Statistic"),
       sidebarLayout(
         sidebarPanel(
-          selectInput("anime", "Choose the first anime", 
-                      choices = c("Cowboy Bebop", "Naruto", "Spirited Away", "Monster", "One Piece", "Trigun", "Berserk", "Fullmetal Alchemist", "Slam Dunk", "Dragon Ball", "Prince of Tennis", "Trinity Blood"),
+          selectInput("anime", "Choose the first anime", #hard coded in selection of animes to compare
+                      choices = c("Cowboy Bebop", "Naruto", "Spirited Away", "Monster", 
+                                  "One Piece", "Trigun", "Berserk", "Fullmetal Alchemist", 
+                                  "Slam Dunk", "Dragon Ball", "Prince of Tennis", "Trinity Blood"),
                       selected = "Naruto"),
           selectInput("anime2", "Choose a second anime to compare to", 
-                      choices = c("Cowboy Bebop", "Naruto", "Spirited Away", "Monster", "One Piece", "Trigun", "Berserk", "Fullmetal Alchemist", "Slam Dunk", "Dragon Ball", "Prince of Tennis", "Trinity Blood"),
+                      choices = c("Mobile Suit Gundam", "Naruto", "One Piece",
+                                  "Bleach", "Neon Genesis Evangelion",
+                                  "Hunter x Hunter", "Initial D", "Love Hina",
+                                  "Spirited Away", "Monster", "Trigun", "Berserk",
+                                  "Fullmetal Alchemist", "Slam Dunk", "Dragon Ball", 
+                                  "Prince of Tennis", "Trinity Blood"),
                       selected = "Cowboy Bebop"),
           h3("BACKGROUND:"),
           p("In this interactive bar graph, there are dropdown menus that allow for the selection of TWO different anime series to compare between. On the title of the graph, the overall average user rating of the anime is listed for perspective comparison."),
@@ -62,8 +75,8 @@ my.ui <- fluidPage(
       )
     ),
     
-    tabPanel(
-      titlePanel("General Statistics"),
+    tabPanel( #scatterplot tab
+      titlePanel("General Statistics"), 
       h1("Satisfaction Levels of Each Anime"),
       sidebarLayout(
         sidebarPanel(
@@ -82,7 +95,7 @@ my.ui <- fluidPage(
       )
     ),
     
-    tabPanel(
+    tabPanel( #pi chart tab
       titlePanel("View Count Comparison"),
       h1("User and Favorite Count Analysis"),
       sidebarLayout(
