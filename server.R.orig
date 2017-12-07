@@ -43,6 +43,13 @@ Scatter.two <- function(d){
 
 
 my.server <- function(input, output) {
+<<<<<<< HEAD
+  output$scatterplot <- renderPlotly({
+    print(input$ageR)
+    data.change <- filter(data, ageRating == input$ageR)
+    return(Scatter.two(data.change, data.change$userCount, data.change$favoritesCount))
+  })
+  
   output$pie <- renderPlotly({
     types.of.show <- select(data, showType, userCount) %>% 
       group_by(showType) %>% 
@@ -62,11 +69,12 @@ my.server <- function(input, output) {
       return(p);
     }
   })
-  
+=======
   output$scatterplot <- renderPlotly({ 
     data.change <- filter(data, showType == input$type)
     return(Scatter.two(data.change))
   }) 
+>>>>>>> 14762a5c1bd429cc96e4e8671054af406531fa4e
 }
 
 shinyServer(my.server)

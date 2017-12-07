@@ -21,28 +21,36 @@ data10 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&p
 combined <- rbind.fill(list(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10))
 
 data <- select(combined, canonicalTitle, showType, synopsis, averageRating, userCount, favoritesCount, startDate,
-               endDate, popularityRank, ratingRank, ageRating, ageRatingGuide, subtype, status, episodeCount, 
-               youtubeVideoId, 
+               endDate, popularityRank, ratingRank, ageRating, episodeCount, youtubeVideoId, 
                posterImage.original, coverImage.original)
 
 
 
 
-Scatter.two <- function(d){
-  p <- ggplot(d, aes( x = userCount, 
-                      y = (favoritesCount/userCount), 
-                      color = ageRating, 
-                      text = paste("Title:", canonicalTitle))) + 
-    geom_point() + 
-    labs(title = "Satisfaction Rate of Anime", 
-         x = "View Count", 
-         y = "Percent Favorited")
+Scatter.one <- function(d, x, y){
+  p <- plot_ly(
+    data = data, x = ~x, y = ~y, type = "scatter", mode = "markers", 
+    marker = list(size = 10,
+                  color = 'rgba(139, 72, 246, .9)',
+                  line = list(color = 'rgba(166, 111, 236, .8)',
+                              width = 2)))
+}
+
+Scatter.two <- function(d, x, y){
+  p <- ggplot(d, aes_string( x = x, y = y)) + geom_point() +  geom_count(color = "rgba(139, 72, 246, .9") + 
+    ggtitle("Viewer Count vs Favorite Count") + xlab("User Count") + ylab("Favorite Count")
   
   return(ggplotly(p))
 }
 
 
 my.server <- function(input, output) {
+  output$scatterplot <- renderPlotly({
+    print(input$ageR)
+    data.change <- filter(data, ageRating == input$ageR)
+    return(Scatter.two(data.change, data.change$userCount, data.change$favoritesCount))
+  })
+  
   output$pie <- renderPlotly({
     types.of.show <- select(data, showType, userCount) %>% 
       group_by(showType) %>% 
@@ -62,11 +70,6 @@ my.server <- function(input, output) {
       return(p);
     }
   })
-  
-  output$scatterplot <- renderPlotly({ 
-    data.change <- filter(data, showType == input$type)
-    return(Scatter.two(data.change))
-  }) 
 }
 
 shinyServer(my.server)

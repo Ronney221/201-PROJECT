@@ -8,6 +8,7 @@ my.ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
+<<<<<<< HEAD
       radioButtons("ageR","Age Rating:",
                    choices = c("R", "PG", "G"),
                    selected = "PG"),
@@ -19,9 +20,11 @@ my.ui <- fluidPage(
                                 "Mobile Suit Gundam", "Cowboy Bebop",
                                 "El Hazard", "Hunter x Hunter",
                                 "Initial D", "Love Hina"), 
-                  selected = "Neon Genesis Evangelion"),
+                  selected = "Neon Genesis Evangelion")
+=======
       radioButtons("type","Show Type:",
                    choices = c("TV", "movie", "OVA", "special"))
+>>>>>>> 14762a5c1bd429cc96e4e8671054af406531fa4e
     ),
 
     mainPanel(
