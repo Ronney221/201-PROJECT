@@ -28,19 +28,15 @@ data <- select(combined, canonicalTitle, showType, synopsis, averageRating, user
 
 
 
-Scatter.one <- function(d, x, y){
-  p <- plot_ly(
-    data = data, x = ~x, y = ~y, type = "scatter", mode = "markers", 
-    marker = list(size = 10,
-                  color = 'rgba(139, 72, 246, .9)',
-                  line = list(color = 'rgba(166, 111, 236, .8)',
-                              width = 2)))
-}
-
 Scatter.two <- function(d){
-  p <- ggplot(d, aes( x = userCount, y = favoritesCount, color = ageRating, text = paste("Title:", d$canonicalTitle))) + 
-       geom_point() + geom_jitter(width = 1, height = 1) +
-       ggtitle("Viewer Count vs Favorite Count") + xlab("User Count") + ylab("Favorite Count")
+  p <- ggplot(d, aes( x = userCount, 
+                      y = (favoritesCount/userCount), 
+                      color = ageRating, 
+                      text = paste("Title:", canonicalTitle))) + 
+    geom_point() + 
+    labs(title = "Satisfaction Rate of Anime", 
+         x = "View Count", 
+         y = "Percent Favorited")
   
   return(ggplotly(p))
 }
