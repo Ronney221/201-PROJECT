@@ -38,9 +38,8 @@ my.ui <- fluidPage(
       titlePanel("jwang"),
       sidebarLayout(
         sidebarPanel(
-          radioButtons("ageR","Age Rating:",
-                       choices = c("R", "PG", "G"),
-                       selected = "PG"),
+          radioButtons("type","Show Type:",
+                       choices = c("TV", "movie", "OVA", "special")),
           radioButtons("showTypes", "Overview of Showtypes or Specific Anime",
                        choices = c("Overview", "Specific")),
           selectInput("specificAnime", "Choose an Anime",
@@ -49,9 +48,8 @@ my.ui <- fluidPage(
                                   "Mobile Suit Gundam", "Cowboy Bebop",
                                   "El Hazard", "Hunter x Hunter",
                                   "Initial D", "Love Hina"), 
-                      selected = "Neon Genesis Evangelion"),
-          radioButtons("type","Show Type:",
-                       choices = c("TV", "movie", "OVA", "special"))
+                      selected = "Neon Genesis Evangelion")
+          
         ),
         
         mainPanel(

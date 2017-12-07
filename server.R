@@ -4,21 +4,8 @@ library(dplyr)
 library(shiny)
 library(plotly)
 library(ggplot2)
+source("api.R")
 
-#API limits one pull to 20 data values
-data1 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=0")$data$attributes)
-data2 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=20")$data$attributes)
-data3 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=40")$data$attributes)
-data4 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=60")$data$attributes)
-data5 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=80")$data$attributes)
-data6 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=100")$data$attributes)
-data7 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=120")$data$attributes)
-data8 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=140")$data$attributes)
-data9 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=160")$data$attributes)
-data10 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=180")$data$attributes)
-
-#combines the 10 dataframes into one data frame w/ 200 values
-combined <- rbind.fill(list(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10))
 
 data <- select(combined, canonicalTitle, showType, synopsis, averageRating, userCount, favoritesCount, startDate,
                endDate, popularityRank, ratingRank, ageRating, ageRatingGuide, subtype, status, episodeCount, 
@@ -33,7 +20,7 @@ data.ratings <- select(combined, canonicalTitle, averageRating, ratingFrequencie
                        ratingFrequencies.19, ratingFrequencies.20)
 
 
-Scatter.two <- function(d){
+Scatter <- function(d){
   p <- ggplot(d, aes( x = userCount, 
                       y = (favoritesCount/userCount), 
                       color = ageRating, 
@@ -91,7 +78,7 @@ my.server <- function(input, output) {
   
   output$scatterplot <- renderPlotly({ 
     data.change <- filter(data, showType == input$type)
-    return(Scatter.two(data.change))
+    return(Scatter(data.change))
   }) 
   
   output$bargraph <- renderPlotly({ 
