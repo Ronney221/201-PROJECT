@@ -1,12 +1,26 @@
 library('shiny')
 library('plotly')
+library('DT')
 
+
+url <- a("Kitsu Anime", href ="https://kitsu.io/explore/anime")
 
 my.ui <- fluidPage(
   
   tabsetPanel(
     tabPanel(
-      titlePanel("Home")
+      titlePanel("Home"),
+      h1("Anime Analysis- Using KITSU API"),
+      h3("By: Ronney Do, Zach Hsiao, Justin Wang, Jeremy Ku"),
+      mainPanel(
+        
+        h2("Purpose: "),
+        h3("The goal of our project is to examine and compare different aspects of anime. We want to answer questions and find trends on why certain Animes are so popular or highly ranked. Are popular main stream anime actually more well liked than other animes? What form of anime is most popular? Using the Kitsu API, we hope to answer general questions about anime and help the user understand the data presented."),
+        h2(url),
+        h3("Kitsu Anime is a website to discover anime. They have a huge database of anime and includes in depth descriptions on each one. Aside from its database of anime, Kitsu also allows users to interact with the website. Some features that it includes are keeping track of finished shows, add to your show list, and allow users to rate and comment on animes. Kitsu offers its own API, allowing us to access data for each anime and see how the community receives each anime."),
+        
+        h2("Anime Database"),
+        DT::dataTableOutput("mytable"))
     ),
     
     tabPanel(
@@ -20,7 +34,6 @@ my.ui <- fluidPage(
         htmlOutput("poster"),
         htmlOutput("cover")
       )
-      #TRY TO PUT PICTURES / YOUTUBE TRAILER HERE AFTER SELECTING AN ANIME
     ),
     
     tabPanel(
@@ -48,37 +61,17 @@ my.ui <- fluidPage(
     ),
     
     tabPanel(
-      titlePanel("View Count Comparison"),
-      h1("User and Favorite Count Analysis"),
+      titlePanel("General Statistics"),
+      h1("Satisfaction Levels of Each Anime"),
       sidebarLayout(
         sidebarPanel(
-          radioButtons("overview", "Choose type of count",
-                       choices = c("User Views", "Favorites")),
-          selectInput("specificAnime", "Choose a Specific Anime",
-                      choices = c("Mobile Suit Gundam", "Neon Genesis Evangelion", 
-                                  "Rurouni Kenshin: Meiji Kenkaku Romantan",
-                                   "Cowboy Bebop", "El Hazard", "Hunter x Hunter",
-                                  "Initial D", "Love Hina"), 
-                      selected = "Mobile Suit Gundam"),
-          h3("Options Explanation:"),
-          p("You have the option of selecting between viewing User counts/views or Favorite counts/votes for the first pie chart. The second pie chart has a dropdown menu of the many anime's with multiple show types."),
-          h3("Data Explanation"),
-          p("The first chart shows the overall similarity between the total User Views and Favorite Votes when compared in terms of show types. The second pie chart shows the relative number of Views for each anime comparatively to it's follow up shows.")
-        ),
-        
-        mainPanel(
-          plotlyOutput("pie1"),
-          plotlyOutput("pie2")
-        )
-      )
-    ),
-    
-    tabPanel(
-      titlePanel("Favorited Graph"),
-      sidebarLayout(
-        sidebarPanel(
+          ##Creates the chioces to filter the animes
           radioButtons("type","Show Type:",
-                       choices = c("TV", "movie", "OVA", "special"))
+                       choices = c("TV", "movie", "OVA", "special")),
+          h3("SCATTERPLOT:"),
+          p("This scatterplot will compare the favorite count and viewer counts of the 1000 selected animes. The radio buttons on the sidepanel allow for the scatterplot to be filtered by type of entertainment, because viewer and favorite counts for different types of productions have different numbers."),
+          h3("EXPLANATION OF THE GRAPH:"),
+          p("This graph represents the actual satisfaction rate for the people who have watched the anime. On the X-axis, we sort the animes by ascending view count, while on the y-axis we sort by the favorite count divided by the viewer count. This allows us to see the percentage of people who watched the anime and genuinely enjoyed it.")
         ),
         
         mainPanel(
@@ -88,15 +81,29 @@ my.ui <- fluidPage(
     ),
     
     tabPanel(
-      titlePanel("2")
-    ),
-    
-    tabPanel(
-      titlePanel("3")
-    ),
-    
-    tabPanel(
-      titlePanel("4")
+      titlePanel("View Count Comparison"),
+      h1("User and Favorite Count Analysis"),
+      sidebarLayout(
+        sidebarPanel(
+          radioButtons("showTypes", "Overview of Showtypes or Specific Anime",
+                       choices = c("Overview", "Specific")),
+          selectInput("specificAnime", "Choose an Anime",
+                      choices = c("Neon Genesis Evangelion",
+                                  "Rurouni Kenshin: Meiji Kenkaku Romantan",
+                                   "Cowboy Bebop", "El Hazard", "Hunter x Hunter",
+                                  "Initial D", "Love Hina"),
+                      selected = "Mobile Suit Gundam"),
+          h3("Options Explanation:"),
+          p("You have the option of selecting between viewing User counts/views or Favorite counts/votes for the first pie chart. The second pie chart has a dropdown menu of the many anime's with multiple show types."),
+          h3("Data Explanation"),
+          p("The first chart shows the overall similarity between the total User Views and Favorite Votes when compared in terms of show types. The second pie chart shows the relative number of Views for each anime comparatively to it's follow up shows.")
+
+        ),
+        mainPanel(
+          plotlyOutput("pie1"),
+          plotlyOutput("pie2")
+        )
+      )
     )
   )
 ) 

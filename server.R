@@ -4,21 +4,8 @@ library(dplyr)
 library(shiny)
 library(plotly)
 library(ggplot2)
-
-#API limits one pull to 20 data values
-data1 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=0")$data$attributes)
-data2 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=20")$data$attributes)
-data3 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=40")$data$attributes)
-data4 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=60")$data$attributes)
-data5 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=80")$data$attributes)
-data6 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=100")$data$attributes)
-data7 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=120")$data$attributes)
-data8 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=140")$data$attributes)
-data9 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=160")$data$attributes)
-data10 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=180")$data$attributes)
-
-#combines the 10 dataframes into one data frame w/ 200 values
-combined <- rbind.fill(list(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10))
+library(DT)
+source("api.R")
 
 data <- select(combined, canonicalTitle, showType, synopsis, averageRating, userCount, favoritesCount, startDate,
                endDate, popularityRank, ratingRank, ageRating, ageRatingGuide, subtype, status, episodeCount, 
@@ -32,15 +19,16 @@ data.ratings <- select(combined, canonicalTitle, averageRating, ratingFrequencie
                        ratingFrequencies.15, ratingFrequencies.16, ratingFrequencies.17, ratingFrequencies.18,
                        ratingFrequencies.19, ratingFrequencies.20)
 
+data.rating <- select(combined, canonicalTitle, averageRating, popularityRank, ratingRank, subtype, startDate, endDate, episodeCount, status)
 
-Scatter.two <- function(d){
+##creates a scatterplot for the passed in data for view count and favorites count
+Scatter <- function(d){
   p <- ggplot(d, aes( x = userCount, 
                       y = (favoritesCount/userCount), 
                       color = ageRating, 
                       text = paste("Title:", canonicalTitle))) + 
     geom_point() + 
-    labs(title = "Satisfaction Rate of Anime", 
-         x = "View Count", 
+    labs(x = "View Count", 
          y = "Percent Favorited")
   
   return(ggplotly(p))
@@ -79,6 +67,11 @@ my.server <- function(input, output) {
   output$poster<-renderText({c('<img src="',filter(data, canonicalTitle == selection())$posterImage.original,'"style="width: 35% ; height: 35%">')})
   output$cover<-renderText({c('<img src="',filter(data, canonicalTitle == selection())$coverImage.original,'"style="width: 35% ; height: 35%">')})
   
+
+  output$mytable = DT::renderDataTable({
+    data.rating
+  })
+  
   output$pie1 <- renderPlotly({
     if (input$overview == 'User Views') {
       types.of.show <- select(data, showType, userCount) %>% 
@@ -110,9 +103,11 @@ my.server <- function(input, output) {
     return(p);
   })
   
+  ##Output for the scatterplot, with renderplotly, updated live feedback
   output$scatterplot <- renderPlotly({ 
+    ##Filters the datafram by type of anime
     data.change <- filter(data, showType == input$type)
-    return(Scatter.two(data.change))
+    return(Scatter(data.change))
   }) 
   
   output$bargraph <- renderPlotly({ 
