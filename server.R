@@ -46,6 +46,7 @@ Scatter.two <- function(d){
   return(ggplotly(p))
 }
 
+
 bar <- function(data1, data2) {
   title1 <- data1$canonicalTitle
   title2 <- data2$canonicalTitle
@@ -69,24 +70,44 @@ bar <- function(data1, data2) {
 
 
 my.server <- function(input, output) {
-  output$pie <- renderPlotly({
-    types.of.show <- select(data, showType, userCount) %>% 
-      group_by(showType) %>% 
-      summarize(userCount = sum(userCount, na.rm=TRUE))
-    if(input$showTypes == 'Overview') {
+  selection <- reactive({input$select})
+  
+  output$info <- renderText({
+    return(c(filter(data, canonicalTitle == selection())$synopsis, "\n"))
+  })
+  
+  output$poster<-renderText({c('<img src="',filter(data, canonicalTitle == selection())$posterImage.original,'"style="width: 35% ; height: 35%">')})
+  output$cover<-renderText({c('<img src="',filter(data, canonicalTitle == selection())$coverImage.original,'"style="width: 35% ; height: 35%">')})
+  
+  output$pie1 <- renderPlotly({
+    if (input$overview == 'User Views') {
+      types.of.show <- select(data, showType, userCount) %>% 
+        group_by(showType) %>% 
+        summarize(userCount = sum(userCount, na.rm=TRUE))
       p <- plot_ly(types.of.show, labels = ~showType, values = ~userCount, type = 'pie') %>%
-          layout(title = 'User counts by show type',
-                 xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                 yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-        return(p);
-    } else {
-      choice <- data[grep(input$specificAnime, data$canonicalTitle), ]
-      p <- plot_ly(choice, labels = ~canonicalTitle, values = ~userCount, type = 'pie') %>%
-        layout(title = "Ratio of Users for show types",
+        layout(title = 'Overview of User Views for each Show Type',
                xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-      return(p);
+      return(p)
+    } else {
+      types.of.show <- select(data, showType, favoritesCount) %>% 
+        group_by(showType) %>% 
+        summarize(favoritesCount = sum(favoritesCount, na.rm=TRUE))
+      p <- plot_ly(types.of.show, labels = ~showType, values = ~favoritesCount, type = 'pie') %>%
+        layout(title = 'Overview of Favorites Count for each Show Type',
+               xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+               yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+      return(p)
     }
+  })
+  
+  output$pie2 <- renderPlotly({
+    choice <- data[grep(input$specificAnime, data$canonicalTitle), ]
+    p <- plot_ly(choice, labels = ~canonicalTitle, values = ~userCount, type = 'pie') %>%
+      layout(title = input$specificAnime,
+             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    return(p);
   })
   
   output$scatterplot <- renderPlotly({ 

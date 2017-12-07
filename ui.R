@@ -7,6 +7,19 @@ my.ui <- fluidPage(
   tabsetPanel(
     tabPanel(
       titlePanel("Home")
+    ),
+    
+    tabPanel(
+      titlePanel("Searchbar"),
+      h1("Search"),
+      sidebarPanel(
+        textInput('select', 'Search for an anime')
+      ),
+      mainPanel(
+        textOutput("info"),
+        htmlOutput("poster"),
+        htmlOutput("cover")
+      )
       #TRY TO PUT PICTURES / YOUTUBE TRAILER HERE AFTER SELECTING AN ANIME
     ),
     
@@ -35,34 +48,43 @@ my.ui <- fluidPage(
     ),
     
     tabPanel(
-      titlePanel("jwang"),
+      titlePanel("View Count Comparison"),
+      h1("User and Favorite Count Analysis"),
       sidebarLayout(
         sidebarPanel(
-          radioButtons("ageR","Age Rating:",
-                       choices = c("R", "PG", "G"),
-                       selected = "PG"),
-          radioButtons("showTypes", "Overview of Showtypes or Specific Anime",
-                       choices = c("Overview", "Specific")),
-          selectInput("specificAnime", "Choose an Anime",
-                      choices = c("Neon Genesis Evangelion", 
+          radioButtons("overview", "Choose type of count",
+                       choices = c("User Views", "Favorites")),
+          selectInput("specificAnime", "Choose a Specific Anime",
+                      choices = c("Mobile Suit Gundam", "Neon Genesis Evangelion", 
                                   "Rurouni Kenshin: Meiji Kenkaku Romantan",
-                                  "Mobile Suit Gundam", "Cowboy Bebop",
-                                  "El Hazard", "Hunter x Hunter",
+                                   "Cowboy Bebop", "El Hazard", "Hunter x Hunter",
                                   "Initial D", "Love Hina"), 
-                      selected = "Neon Genesis Evangelion"),
-          radioButtons("type","Show Type:",
-                       choices = c("TV", "movie", "OVA", "special"))
+                      selected = "Mobile Suit Gundam"),
+          h3("Options Explanation:"),
+          p("You have the option of selecting between viewing User counts/views or Favorite counts/votes for the first pie chart. The second pie chart has a dropdown menu of the many anime's with multiple show types."),
+          h3("Data Explanation"),
+          p("The first chart shows the overall similarity between the total User Views and Favorite Votes when compared in terms of show types. The second pie chart shows the relative number of Views for each anime comparatively to it's follow up shows.")
         ),
         
         mainPanel(
-          plotlyOutput("scatterplot"),
-          plotlyOutput("pie")
+          plotlyOutput("pie1"),
+          plotlyOutput("pie2")
         )
       )
     ),
     
     tabPanel(
-      titlePanel("1")
+      titlePanel("Favorited Graph"),
+      sidebarLayout(
+        sidebarPanel(
+          radioButtons("type","Show Type:",
+                       choices = c("TV", "movie", "OVA", "special"))
+        ),
+        
+        mainPanel(
+          plotlyOutput("scatterplot")
+        )
+      )
     ),
     
     tabPanel(
