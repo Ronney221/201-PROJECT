@@ -43,12 +43,33 @@ Scatter.two <- function(d, x, y){
   return(ggplotly(p))
 }
 
+
 my.server <- function(input, output) {
-  output$scatterplot <- renderPlotly({ 
+  output$scatterplot <- renderPlotly({
     print(input$ageR)
     data.change <- filter(data, ageRating == input$ageR)
     return(Scatter.two(data.change, data.change$userCount, data.change$favoritesCount))
-  }) 
+  })
+  
+  output$pie <- renderPlotly({
+    types.of.show <- select(data, showType, userCount) %>% 
+      group_by(showType) %>% 
+      summarize(userCount = sum(userCount, na.rm=TRUE))
+    if(input$showTypes == 'Overview') {
+      p <- plot_ly(types.of.show, labels = ~showType, values = ~userCount, type = 'pie') %>%
+          layout(title = 'User counts by show type',
+                 xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                 yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+        return(p);
+    } else {
+      choice <- data[grep(input$specificAnime, data$canonicalTitle), ]
+      p <- plot_ly(choice, labels = ~canonicalTitle, values = ~userCount, type = 'pie') %>%
+        layout(title = "Ratio of Users for show types",
+               xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+               yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+      return(p);
+    }
+  })
 }
 
 shinyServer(my.server)
