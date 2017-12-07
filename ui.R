@@ -11,11 +11,14 @@ my.ui <- fluidPage(
     tabPanel(
       titlePanel("Home"),
       h1("Anime Analysis- Using KITSU API"),
-      h3("By: Ronney Do, Zach Hsiao, Justin Wang, Jeremy Ku"),
+      h3("By: ", a("Ronney Do", href="https://github.com/Ronney221"), ", ",
+         a("Zach Hsiao", href="https://github.com/ZmanHsiao"), ", ",
+         a("Justin Wang", href="https://github.com/justinwang98"), ", ",
+         a("Jeremy Ku", href="https://github.com/kujeremy")),
       mainPanel(
         
         h2("Purpose: "),
-        h3("The goal of our project is to examine and compare different aspects of anime. We want to answer questions and find trends on why certain Animes are so popular or highly ranked. Are popular main stream anime actually more well liked than other animes? What form of anime is most popular? Using the Kitsu API, we hope to answer general questions about anime and help the user understand the data presented."),
+        h3("The goal of our project is to examine and compare different aspects of anime. We want to answer questions and find trends on why certain Animes are so popular or highly ranked. Are popular main stream anime actually more well liked than other animes? What form of anime is most popular? Using the Kitsu API, we hope to answer general questions about anime and help the user understand the data presented. The code for this webpage can be found at our ", a("GITHUB PAGE", href="https://github.com/Ronney221/201-PROJECT")),
         h2(url),
         h3("Kitsu Anime is a website to discover anime. They have a huge database of anime and includes in depth descriptions on each one. Aside from its database of anime, Kitsu also allows users to interact with the website. Some features that it includes are keeping track of finished shows, add to your show list, and allow users to rate and comment on animes. Kitsu offers its own API, allowing us to access data for each anime and see how the community receives each anime."),
         
