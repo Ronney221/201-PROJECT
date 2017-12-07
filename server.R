@@ -75,7 +75,7 @@ my.server <- function(input, output) {
   output$pie1 <- renderPlotly({
     if (input$overview == 'User Views') {
       types.of.show <- select(data, showType, userCount) %>% 
-        group_by(showType) %>% 
+        group_by(showType) %>%
         summarize(userCount = sum(userCount, na.rm=TRUE))
       p <- plot_ly(types.of.show, labels = ~showType, values = ~userCount, type = 'pie') %>%
         layout(title = 'Overview of User Views for each Show Type',

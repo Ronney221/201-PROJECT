@@ -24,15 +24,19 @@ my.ui <- fluidPage(
     ),
     
     tabPanel(
-      titlePanel("Searchbar"),
+      titlePanel("Search bar"),
       h1("Search"),
-      sidebarPanel(
-        textInput('select', 'Search for an anime')
-      ),
-      mainPanel(
-        textOutput("info"),
-        htmlOutput("poster"),
-        htmlOutput("cover")
+      sidebarLayout(
+        sidebarPanel(
+          textInput('select', 'Search for an anime:'),
+          h3("EXPLANATION:"),
+          p("This search bar is a string matching search among 1000 datapoints in the dataset, searching for the name of an anime will cause the synopsis, poster image, and cover image to appear.")
+        ),
+        mainPanel(
+          textOutput("info"),
+          htmlOutput("poster"),
+          htmlOutput("cover")
+        )
       )
     ),
     
@@ -85,17 +89,17 @@ my.ui <- fluidPage(
       h1("User and Favorite Count Analysis"),
       sidebarLayout(
         sidebarPanel(
-          radioButtons("showTypes", "Overview of Showtypes or Specific Anime",
-                       choices = c("Overview", "Specific")),
+          radioButtons("overview", "Choose type to count:",
+                       choices = c("User Views", "Favorite Votes")),
           selectInput("specificAnime", "Choose an Anime",
-                      choices = c("Neon Genesis Evangelion",
-                                  "Rurouni Kenshin: Meiji Kenkaku Romantan",
-                                   "Cowboy Bebop", "El Hazard", "Hunter x Hunter",
-                                  "Initial D", "Love Hina"),
+                      choices = c( "Mobile Suit Gundam", "Naruto", "One Piece",
+                                   "Bleach", "Neon Genesis Evangelion",
+                                  "Rurouni Kenshin", "Cowboy Bebop", "El Hazard", 
+                                  "Hunter x Hunter", "Initial D", "Love Hina"),
                       selected = "Mobile Suit Gundam"),
-          h3("Options Explanation:"),
+          h3("OPTIONS EXPLANATION:"),
           p("You have the option of selecting between viewing User counts/views or Favorite counts/votes for the first pie chart. The second pie chart has a dropdown menu of the many anime's with multiple show types."),
-          h3("Data Explanation"),
+          h3("DATA EXPLANATION:"),
           p("The first chart shows the overall similarity between the total User Views and Favorite Votes when compared in terms of show types. The second pie chart shows the relative number of Views for each anime comparatively to it's follow up shows.")
 
         ),
