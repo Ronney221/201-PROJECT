@@ -1,10 +1,12 @@
 source("api.R")
 
+#main data frame that has the useful data selected from our api pull
 data <- select(combined, canonicalTitle, showType, synopsis, averageRating, userCount, favoritesCount, startDate,
                endDate, popularityRank, ratingRank, ageRating, ageRatingGuide, subtype, status, episodeCount, 
                youtubeVideoId, 
                posterImage.original, coverImage.original)
 
+#separate data frame used for rating comparison in the bar graph
 data.ratings <- select(combined, canonicalTitle, averageRating, ratingFrequencies.2, ratingFrequencies.3,
                        ratingFrequencies.4, ratingFrequencies.4, ratingFrequencies.5, ratingFrequencies.6,
                        ratingFrequencies.7, ratingFrequencies.8, ratingFrequencies.9, ratingFrequencies.10,
@@ -12,6 +14,7 @@ data.ratings <- select(combined, canonicalTitle, averageRating, ratingFrequencie
                        ratingFrequencies.15, ratingFrequencies.16, ratingFrequencies.17, ratingFrequencies.18,
                        ratingFrequencies.19, ratingFrequencies.20)
 
+#separate data frame used for synopsis and image display in the search tab
 data.rating <- select(combined, canonicalTitle, averageRating, popularityRank, ratingRank, subtype, startDate, endDate, episodeCount, status)
 
 ##creates a scatterplot for the passed in data for view count and favorites count
@@ -27,7 +30,8 @@ Scatter <- function(d){
   return(ggplotly(p))
 }
 
-
+#creates a bar graph using two passed in data frames that compare values to each other
+#specifically the rating frequencies used between 10% to 100% ratings
 bar <- function(data1, data2) {
   title1 <- data1$canonicalTitle
   title2 <- data2$canonicalTitle
@@ -49,7 +53,7 @@ bar <- function(data1, data2) {
   p <- ggplotly(p)
 }
 
-
+#server function used to connect to ui.R
 my.server <- function(input, output) {
   # Reactive function that returns the choice for select
   selection <- reactive({input$select})
@@ -109,6 +113,8 @@ my.server <- function(input, output) {
     return(Scatter(data.change))
   }) 
   
+  #Outputs for the average user rating bar graph
+  #takes in two anime titles as input
   output$bargraph <- renderPlotly({ 
     new.data <- filter(data.ratings, canonicalTitle == input$anime)
     new.data2 <- filter(data.ratings, canonicalTitle == input$anime2)
