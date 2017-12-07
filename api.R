@@ -1,4 +1,14 @@
+library(jsonlite)
+library(plyr)
+library(dplyr)
+library(shiny)
+library(plotly)
+library(ggplot2)
+library(DT)
+
 #API limits one pull to 20 data values
+#in order to get 1000 anime listings, we have to make 50 calls
+#for better data visualization in our graphs
 data1 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=0")$data$attributes)
 data2 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=20")$data$attributes)
 data3 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&page%5Boffset%5D=40")$data$attributes)
@@ -53,7 +63,7 @@ data51 <- flatten(fromJSON("https://kitsu.io/api/edge/anime?page%5Blimit%5D=20&p
 
 
 
-#combines the 10 dataframes into one data frame w/ 200 values
+#combines the 50 dataframes into one data frame w/ 1000 values
 combined <- rbind.fill(list(data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, 
                             data11, data12, data13, data14, data15, data16, data17, data18, data19, data20,
                             data21, data22, data23, data24, data15, data26, data27, data28, data29, data30, 

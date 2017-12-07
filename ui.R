@@ -1,8 +1,3 @@
-library('shiny')
-library('plotly')
-library('DT')
-
-
 url <- a("Kitsu Anime", href ="https://kitsu.io/explore/anime")
 
 my.ui <- fluidPage(

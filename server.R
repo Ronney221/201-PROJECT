@@ -1,10 +1,3 @@
-library(jsonlite)
-library(plyr)
-library(dplyr)
-library(shiny)
-library(plotly)
-library(ggplot2)
-library(DT)
 source("api.R")
 
 data <- select(combined, canonicalTitle, showType, synopsis, averageRating, userCount, favoritesCount, startDate,
