@@ -1,12 +1,26 @@
 library('shiny')
 library('plotly')
+library('DT')
 
+
+url <- a("Kitsu Anime", href ="https://kitsu.io/explore/anime")
 
 my.ui <- fluidPage(
   
   tabsetPanel(
     tabPanel(
-      titlePanel("Home")
+      titlePanel("Home"),
+      h1("Anime Analysis- Using KITSU API"),
+      h3("By: Ronney Do, Zach Hsiao, Justin Wang, Jeremy Ku"),
+      mainPanel(
+        
+        h2("Purpose: "),
+        h3("The goal of our project is to examine and compare different aspects of anime. We want to answer questions and find trends on why certain Animes are so popular or highly ranked. Are popular main stream anime actually more well liked than other animes? What form of anime is most popular? Using the Kitsu API, we hope to answer general questions about anime and help the user understand the data presented."),
+        h2(url),
+        h3("Kitsu Anime is a website to discover anime. They have a huge database of anime and includes in depth descriptions on each one. Aside from its database of anime, Kitsu also allows users to interact with the website. Some features that it includes are keeping track of finished shows, add to your show list, and allow users to rate and comment on animes. Kitsu offers its own API, allowing us to access data for each anime and see how the community receives each anime."),
+        
+        h2("Anime Database"),
+        DT::dataTableOutput("mytable"))
       #TRY TO PUT PICTURES / YOUTUBE TRAILER HERE AFTER SELECTING AN ANIME
     ),
     

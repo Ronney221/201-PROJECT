@@ -4,6 +4,7 @@ library(dplyr)
 library(shiny)
 library(plotly)
 library(ggplot2)
+library(DT)
 source("api.R")
 
 data <- select(combined, canonicalTitle, showType, synopsis, averageRating, userCount, favoritesCount, startDate,
@@ -17,6 +18,8 @@ data.ratings <- select(combined, canonicalTitle, averageRating, ratingFrequencie
                        ratingFrequencies.11, ratingFrequencies.12, ratingFrequencies.13, ratingFrequencies.14,
                        ratingFrequencies.15, ratingFrequencies.16, ratingFrequencies.17, ratingFrequencies.18,
                        ratingFrequencies.19, ratingFrequencies.20)
+
+data.rating <- select(combined, canonicalTitle, averageRating, popularityRank, ratingRank, subtype, startDate, endDate, episodeCount, status)
 
 ##creates a scatterplot for the passed in data for view count and favorites count
 Scatter <- function(d){
@@ -54,6 +57,11 @@ bar <- function(data1, data2) {
 
 
 my.server <- function(input, output) {
+  
+  output$mytable = DT::renderDataTable({
+    data.rating
+  })
+  
   output$pie <- renderPlotly({
     types.of.show <- select(data, showType, userCount) %>% 
       group_by(showType) %>% 
