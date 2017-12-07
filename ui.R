@@ -8,9 +8,8 @@ my.ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      radioButtons("ageR","Age Rating:",
-                   choices = c("R", "PG", "G"),
-                   selected = "PG")
+      radioButtons("type","Show Type:",
+                   choices = c("TV", "movie", "OVA", "special"))
     ),
 
     mainPanel(
