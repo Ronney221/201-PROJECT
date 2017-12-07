@@ -6,7 +6,6 @@ library(plotly)
 library(ggplot2)
 source("api.R")
 
-
 data <- select(combined, canonicalTitle, showType, synopsis, averageRating, userCount, favoritesCount, startDate,
                endDate, popularityRank, ratingRank, ageRating, ageRatingGuide, subtype, status, episodeCount, 
                youtubeVideoId, 
@@ -19,15 +18,14 @@ data.ratings <- select(combined, canonicalTitle, averageRating, ratingFrequencie
                        ratingFrequencies.15, ratingFrequencies.16, ratingFrequencies.17, ratingFrequencies.18,
                        ratingFrequencies.19, ratingFrequencies.20)
 
-
+##creates a scatterplot for the passed in data for view count and favorites count
 Scatter <- function(d){
   p <- ggplot(d, aes( x = userCount, 
                       y = (favoritesCount/userCount), 
                       color = ageRating, 
                       text = paste("Title:", canonicalTitle))) + 
     geom_point() + 
-    labs(title = "Satisfaction Rate of Anime", 
-         x = "View Count", 
+    labs(x = "View Count", 
          y = "Percent Favorited")
   
   return(ggplotly(p))
@@ -76,7 +74,9 @@ my.server <- function(input, output) {
     }
   })
   
+  ##Output for the scatterplot, with renderplotly, updated live feedback
   output$scatterplot <- renderPlotly({ 
+    ##Filters the datafram by type of anime
     data.change <- filter(data, showType == input$type)
     return(Scatter(data.change))
   }) 

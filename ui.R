@@ -35,11 +35,17 @@ my.ui <- fluidPage(
     ),
     
     tabPanel(
-      titlePanel("jwang"),
+      titlePanel("General Statistics"),
+      h1("Satisfaction Levels of Each Anime"),
       sidebarLayout(
         sidebarPanel(
+          ##Creates the chioces to filter the animes
           radioButtons("type","Show Type:",
                        choices = c("TV", "movie", "OVA", "special")),
+          h3("SCATTERPLOT:"),
+          p("This scatterplot will compare the favorite count and viewer counts of the 1000 selected animes. The radio buttons on the sidepanel allow for the scatterplot to be filtered by type of entertainment, because viewer and favorite counts for different types of productions have different numbers."),
+          h3("EXPLANATION OF THE GRAPH:"),
+          p("This graph represents the actual satisfaction rate for the people who have watched the anime. On the X-axis, we sort the animes by ascending view count, while on the y-axis we sort by the favorite count divided by the viewer count. This allows us to see the percentage of people who watched the anime and genuinely enjoyed it."),
           radioButtons("showTypes", "Overview of Showtypes or Specific Anime",
                        choices = c("Overview", "Specific")),
           selectInput("specificAnime", "Choose an Anime",
@@ -60,7 +66,22 @@ my.ui <- fluidPage(
     ),
     
     tabPanel(
-      titlePanel("1")
+      titlePanel("1"),
+      sidebarLayout(
+        sidebarPanel(
+          radioButtons("showTypes", "Overview of Showtypes or Specific Anime",
+                       choices = c("Overview", "Specific")),
+          selectInput("specificAnime", "Choose an Anime",
+                      choices = c("Neon Genesis Evangelion", 
+                                  "Rurouni Kenshin: Meiji Kenkaku Romantan",
+                                  "Mobile Suit Gundam", "Cowboy Bebop",
+                                  "El Hazard", "Hunter x Hunter",
+                                  "Initial D", "Love Hina"), 
+                      selected = "Neon Genesis Evangelion")
+        ),
+        mainPanel(
+        )
+      )
     ),
     
     tabPanel(
